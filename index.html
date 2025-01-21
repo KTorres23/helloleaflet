@@ -31,13 +31,48 @@
     <div id="map"></div>
 
     <script>
-        var map = L.map('map').setView([51.505, -0.09], 13);
+        var map = L.map('map').setView([30.606765689115424, -87.07461891902409], 13);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         axZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
+    var marker = L.marker([30.606765689115424, -87.07461891902409]).addTo(map);
+
+    var circle = L.circle([30.606765689115424, -87.07461891902409], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: 500
+    }).addTo(map);
+
+    var polygon = L.polygon([
+        [30.62, -87.1],
+        [30.59, -87.1],
+        [30.62, -87.069]
+    ]).addTo(map);
+
+    marker.bindPopup("<div style='text-align: center;'><b>University of Florida</b><br>Milton campus</div>").openPopup();
+    circle.bindPopup("This is the UF in Milton campus.");
+    polygon.bindPopup("I am a polygon.");
+
+    var popup = L.popup()
+        .setLatLng([30.616765689115424, -87.07461891902409])
+        .setContent("Here is some forested land.")
+        .openOn(map);
+
+
+    var popup = L.popup();
+
+    function onMapClick(e) {
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(map);
+    }
+
+    map.on('click', onMapClick);
     </script>
 
 </body>
