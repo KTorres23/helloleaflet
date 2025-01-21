@@ -73,6 +73,47 @@
     }
 
     map.on('click', onMapClick);
+
+    // Geolocation
+    var userLocation;
+
+    function onLocationFound(e) {
+        var radius = e.accuracy / 2;
+        userLocation = e.latlng;
+
+        L.circle(e.latlng, radius).addTo(map);
+    }
+
+    map.on('locationfound', onLocationFound);
+
+    function onLocationError(e) {
+        alert(e.message);
+    }
+
+    map.on('locationerror', onLocationError);
+
+    // Start locating the user without changing the view
+    map.locate({setView: false, maxZoom: 16});
+
+    function onMapClick(e) {
+        if (userLocation) {
+            var distance = map.distance(userLocation, e.latlng) / 1000; // Convert meters to kilometers
+            popup
+                .setLatLng(e.latlng)
+                .setContent("You clicked the map at " + e.latlng.toString() + "<br>Distance from your location: " + distance.toFixed(2) + " kilometers")
+                .openOn(map);
+        } else {
+            popup
+                .setLatLng(e.latlng)
+                .setContent("You clicked the map at " + e.latlng.toString())
+                .openOn(map);
+        }
+    }
+
+    map.on('click', onMapClick);
+
+
+
     </script>
 
 </body>
